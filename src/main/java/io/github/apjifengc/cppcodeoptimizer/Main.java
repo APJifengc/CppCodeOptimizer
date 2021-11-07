@@ -1,9 +1,15 @@
-package io.github.apjifengc;
+package io.github.apjifengc.cppcodeoptimizer;
 
+import br.com.criativasoft.cpluslibparser.SourceParser;
 import lombok.Getter;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.Queue;
 
 public class Main {
     private static final String USAGE = "Usage: <file> [-o <output_file>] [-d]";
@@ -18,8 +24,6 @@ public class Main {
     private static File inputFile;
     @Getter
     private static File outputFile;
-    @Getter
-    private static Scanner input;
     @Getter
     private static PrintStream output;
     @Getter
@@ -69,14 +73,7 @@ public class Main {
                         ERROR.printf("Error: Unknown argument '%s'.\n", argType);
                         System.exit(-1);
                     } else {
-                        try {
-                            inputFile = new File(argType);
-                            input = new Scanner(inputFile);
-                        } catch (FileNotFoundException e) {
-                            ERROR.printf("Error: Cannot open the input file '%s'.\n", argType);
-                            e.printStackTrace();
-                            System.exit(-1);
-                        }
+                        inputFile = new File(argType);
                     }
             }
         }
@@ -108,9 +105,8 @@ public class Main {
     public static void main(String[] args) {
         parseArguments(args);
         log("Start parsing...");
-        while (input.hasNextLine()) {
-            output.println(input.nextLine());
-        }
+        SourceParser parser = new SourceParser();
+        parser.parse(inputFile);
         log("Output done.");
     }
 }

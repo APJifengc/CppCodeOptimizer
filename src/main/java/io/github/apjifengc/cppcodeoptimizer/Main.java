@@ -1,7 +1,6 @@
 package io.github.apjifengc.cppcodeoptimizer;
 
 import br.com.criativasoft.cpluslibparser.SourceParser;
-import lombok.Getter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,13 +19,9 @@ public class Main {
             -d, --debug  Print the debug info.""";
     public static final PrintStream OUTPUT = System.out;
     public static final PrintStream ERROR = System.err;
-    @Getter
     private static File inputFile;
-    @Getter
     private static File outputFile;
-    @Getter
     private static PrintStream output;
-    @Getter
     private static boolean debugMode = false;
 
     private static void parseArguments(String[] args) {

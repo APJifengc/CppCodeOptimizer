@@ -7,27 +7,55 @@
     <groupId>io.github.apjifengc</groupId>
     <artifactId>CppCodeOptimizer</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <repositories>
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.22</version>
-            <scope>compile</scope>
+            <groupId>eclipse</groupId>
+            <artifactId>eclipse-core</artifactId>
+            <version>5.6.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/tmp/eclipse-core-5.6.0.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>eclipse</groupId>
+            <artifactId>eclipse-common</artifactId>
+            <version>3.6.200</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/tmp/eclipse-common-3.6.200.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>cppparser</groupId>
+            <artifactId>cppparser</artifactId>
+            <version>3.6.200</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/tmp/cplus-libparser-0.0.1.jar</systemPath>
+        </dependency>
+        <!--<dependency>
             <groupId>org.eclipse</groupId>
             <artifactId>eclipse-cdt</artifactId>
             <version>7.3.0</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/org.eclipse.cdt.core_7.3.0.202107251003.jar</systemPath>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.eclipse.equinox/common -->
         <dependency>
             <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.common</artifactId>
             <version>3.15.0</version>
+            <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.core</artifactId>
+            <version>8.0.0</version>
+            <scope>compile</scope>
+        </dependency>-->
     </dependencies>
 
     <properties>
@@ -37,6 +65,26 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>unpack-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeScope>system</includeScope>
+                            <includeScope>compile</includeScope>
+                            <excludes>META-INF/*.SF,META-INF/*.DSA,META-INF/*.RSA</excludes>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -50,24 +98,6 @@
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>unpack-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>unpack-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <excludes>META-INF/*.SF,META-INF/*.DSA,META-INF/*.RSA</excludes>
-                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

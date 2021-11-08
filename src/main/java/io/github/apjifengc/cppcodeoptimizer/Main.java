@@ -1,16 +1,25 @@
 package io.github.apjifengc.cppcodeoptimizer;
 
+import br.com.criativasoft.cpluslibparser.LibraryIndex;
 import br.com.criativasoft.cpluslibparser.SourceParser;
+import org.eclipse.cdt.core.dom.ast.ExpansionOverlapsBoundaryException;
 
+import javax.xml.transform.Source;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Date;
 import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Queue;
+import java.util.logging.*;
+import java.util.stream.Stream;
 
 public class Main {
+    public final static Logger LOG = Logger.getLogger("CppCodeOptimizer");
+
     private static final String USAGE = "Usage: <file> [-o <output_file>] [-d]";
     private static final String HELP = """
                 <file>   Select the input file.
@@ -91,17 +100,39 @@ public class Main {
         }
     }
 
-    public static void log(String info, Object... args) {
+    public static void log(Level level, String info, Object... args) {
         if (debugMode) {
-            OUTPUT.printf(info + "\n", args);
+            LOG.log(level, info.formatted(args));
         }
     }
 
     public static void main(String[] args) {
         parseArguments(args);
-        log("Start parsing...");
-        SourceParser parser = new SourceParser();
+        LOG.setLevel(Level.ALL);
+        LOG.setUseParentHandlers(false);
+        Formatter formatter = new Formatter() {
+            @Override
+            public String format(LogRecord record) {
+                Calendar calendar = Calendar.getInstance();
+                return "[%02d:%02d:%02d] [%s] %s\n".formatted(
+                        calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE),
+                        calendar.get(Calendar.SECOND),
+                        record.getLevel().getName(),
+                        record.getMessage()
+                );
+            }
+        };
+        StreamHandler handler = new StreamHandler(
+                OUTPUT,
+                formatter
+        );
+        handler.setLevel(Level.ALL);
+        LOG.addHandler(handler);
+        log(Level.INFO, "Start parsing...");
+        SourceParser parser = new SourceParser(LOG);
         parser.parse(inputFile);
-        log("Output done.");
+        System.out.println(parser.getGlobalFunctions());
+        log(Level.INFO, "Output done.");
     }
 }

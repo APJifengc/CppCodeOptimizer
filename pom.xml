@@ -30,13 +30,6 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/tmp/eclipse-common-3.6.200.jar</systemPath>
         </dependency>
-        <dependency>
-            <groupId>cppparser</groupId>
-            <artifactId>cppparser</artifactId>
-            <version>3.6.200</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/tmp/cplus-libparser-0.0.1.jar</systemPath>
-        </dependency>
         <!--<dependency>
             <groupId>org.eclipse</groupId>
             <artifactId>eclipse-cdt</artifactId>
